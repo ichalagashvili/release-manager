@@ -30,14 +30,19 @@ async function getLatestTag(octokit, owner, repo) {
 
 async function makeRelease(octokit, owner, repo, tag_name) {
   try {
-    await octokit.repos.createRelease({
+    // await octokit.repos.createRelease({
+    //   owner,
+    //   repo,
+    //   tag_name,
+    //   name: tag_name,
+    //   body: `release ${tag_name}`,
+    //   draft: false,
+    //   prerelease: false
+    // });
+    await octokit.request('POST /repos/{owner}/{repo}/releases', {
       owner,
       repo,
-      tag_name,
-      name: tag_name,
-      body: `release ${tag_name}`,
-      draft: false,
-      prerelease: false
+      tag_name
     });
   } catch (error) {
     console.log('error', error);
@@ -55,7 +60,7 @@ async function run() {
     const payload = JSON.stringify(github.context.payload, undefined, 2)
     console.log(`The event payload: ${payload}`);
     const nextTagName = await getLatestTag(octokit, owner, repo);
-    makeRelease(octokit, owner, repo, nextTagName);
+    await makeRelease(octokit, owner, repo, nextTagName);
   } catch (error) {
     core.setFailed(error.message);
   }
