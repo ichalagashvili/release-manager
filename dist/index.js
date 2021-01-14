@@ -12,11 +12,15 @@ const { Octokit } = __nccwpck_require__(276);
 const octokit = new Octokit()
 
 async function getLatestRelease() {
-  const releases  = await octokit.repos.getLatestRelease({
-    owner: 'ichalagashvili',
-    repo: 'app-builder',
-  });
-  console.log('releases', releases);
+  try {
+    const releases  = await octokit.repos.getLatestRelease({
+      owner: 'ichalagashvili',
+      repo: 'release-manager',
+    });
+    console.log('releases', releases);
+  } catch (error) {
+    console.log('error', error);
+  }
 }
 
 try {
