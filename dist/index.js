@@ -55,7 +55,7 @@ async function makeRelease(octokit, o, r, t, token) {
   
   const owner = "ichalagashvili";
   const repo = "app-builder";
-  const tag_name = "irakli tag";
+  const tag_name = "v6.1.777";
   const body = 'released by gm';
   const draft = false;
   const prerelease = false;
