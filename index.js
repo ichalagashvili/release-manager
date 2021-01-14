@@ -6,11 +6,11 @@ const octokit = new Octokit()
 
 async function getLatestRelease() {
   try {
-    const releases  = await octokit.repos.listReleases({
+    const tags  = await octokit.repos.listTags({
       owner: 'ichalagashvili',
-      repo: 'release-manager',
+      repo: 'app-builder',
     });
-    console.log('releases', releases);
+    console.log('tags', tags);
   } catch (error) {
     console.log('error', error);
   }
