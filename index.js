@@ -14,7 +14,7 @@ async function getLatestTag() {
     const tags  = await octokit.repos.listTags({
       owner: 'ichalagashvili',
       repo: 'app-builder',
-    });
+    }).data || [];
     console.log('tags', tags);
     const latestTag = tags[0] || {};
     console.log('latestTag', latestTag);
