@@ -31,6 +31,6 @@ Next tag name
 id: 'release_manager'  
 uses: ichalagashvili/release-managaer@master  
 with:  
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
-  owner: 'ichalagashvili'  
-  repo: 'app-builder'
+&nbsp;&nbsp;GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+&nbsp;&nbsp;owner: 'ichalagashvili'  
+&nbsp;&nbsp;repo: 'app-builder'
