@@ -1,21 +1,36 @@
-# Hello world javascript action
+# Javascript implementation for a specific Github Action
 
-This action prints "Hello World" or "Hello" + the name of a person to greet to the log.
+This action does following:
+- Gets latest release tag name
+- Calculates next release tag name using Entando's policy
+- Makes a new release with that new tagname
 
 ## Inputs
 
-### `who-to-greet`
+### `repo`
 
-**Required** The name of the person to greet. Default `"World"`.
+**Required** The name of the repository (e.g `app-builder`).
+
+### `owner`
+
+**Required** The name of the owner of the repository (e.g `entando`).
+
+
+### `GITHUB_TOKEN`
+
+**Required** Token used for making auth requred call when making a new release  (e.g `entando`).
 
 ## Outputs
 
-### `time`
+### `nextTagName`
 
-The time we greeted you.
+Next tag name
 
 ## Example usage
 
-uses: actions/hello-world-javascript-action@v1.1
+id: 'release_manager'
+uses: ichalagashvili/release-managaer@master
 with:
-  who-to-greet: 'Mona the Octocat'
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  owner: 'ichalagashvili'
+  repo: 'app-builder'
