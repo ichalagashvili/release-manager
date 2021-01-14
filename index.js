@@ -29,27 +29,16 @@ async function getLatestTag(octokit, owner, repo) {
   }
 }
 
-async function makeRelease(octokit, o, r, t, token) {
-  // try {
-  //   await octokit.repos.createRelease({
-  //     owner,
-  //     repo,
-  //     tag_name,
-  //   });
-  // } catch (error) {
-  //   console.log('error is', error);
-  //   core.setFailed(error.message);
-  // }
+async function makeRelease(owner, repo, tag_name, token) {
   const requestWithAuth = request.defaults({
     headers: {
       authorization: `Bearer ${token}`
     },
   });
-  
-  const owner = "ichalagashvili";
-  const repo = "app-builder";
-  const tag_name = "v6.1.777";
-  const body = 'released by gm';
+
+  console.log('tag_name is:', tag_name);
+
+  const body = `released ${tag_name}`;
   const draft = false;
   const prerelease = false;
   
@@ -81,7 +70,7 @@ async function run() {
     const payload = JSON.stringify(github.context.payload, undefined, 2)
     console.log(`The event payload: ${payload}`);
     const nextTagName = await getLatestTag(octokit, owner, repo);
-    await makeRelease(octokit, owner, repo, nextTagName, myToken);
+    await makeRelease(owner, repo, nextTagName, myToken);
   } catch (error) {
     core.setFailed(error.message);
   }
