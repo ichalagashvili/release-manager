@@ -41,6 +41,10 @@ async function makeRelease(octokit, owner, repo, tag_name) {
       owner,
       repo,
       tag_name,
+      name: tag_name,
+      body: `release ${tag_name}`,
+      draft: false,
+      prerelease: false
     });
   } catch (error) {
     console.log('error', error);
