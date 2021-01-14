@@ -4,15 +4,26 @@ const { Octokit } = require('@octokit/rest');
 
 const octokit = new Octokit()
 
-async function getLatestRelease() {
+function calculateNextTag(currentTag) {
+  // @TODO what if someone pushes a bad tag manually in the repo? needs robustness
+  return parseInt(currentTag.split(".")).reverse()[0] + 1;
+}
+
+async function getLatestTag() {
   try {
     const tags  = await octokit.repos.listTags({
       owner: 'ichalagashvili',
       repo: 'app-builder',
     });
     console.log('tags', tags);
+    const latestTag = tags[0] || {};
+    console.log('latestTag', latestTag);
+    const nextTagName = calculateNextTag(latestTag.name || '0.0.0');
+    console.log('nextTagName', nextTagName);
+    core.setOutput('nextTagName', nextTagName);
   } catch (error) {
     console.log('error', error);
+    core.setFailed(error.message);
   }
 }
 
@@ -25,7 +36,7 @@ try {
   // Get the JSON webhook payload for the event that triggered the workflow
   const payload = JSON.stringify(github.context.payload, undefined, 2)
   console.log(`The event payload: ${payload}`);
-  getLatestRelease();
+  getLatestTag();
 } catch (error) {
   core.setFailed(error.message);
 }
