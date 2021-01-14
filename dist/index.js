@@ -7,6 +7,7 @@ module.exports =
 
 const core = __nccwpck_require__(24);
 const github = __nccwpck_require__(16);
+const { request } = __nccwpck_require__(364);
 
 function calculateNextTag(currentTag) {
   // @TODO what if someone pushes a bad tag manually in the repo? needs robustness
@@ -35,22 +36,51 @@ async function getLatestTag(octokit, owner, repo) {
   }
 }
 
-async function makeRelease(octokit, owner, repo, tag_name) {
-  try {
-    await octokit.repos.createRelease({
+async function makeRelease(octokit, o, r, t, token) {
+  // try {
+  //   await octokit.repos.createRelease({
+  //     owner,
+  //     repo,
+  //     tag_name,
+  //   });
+  // } catch (error) {
+  //   console.log('error is', error);
+  //   core.setFailed(error.message);
+  // }
+  const requestWithAuth = request.defaults({
+    headers: {
+      authorization: `Bearer ${token}`
+    },
+  });
+  
+  const owner = "ichalagashvili";
+  const repo = "app-builder";
+  const tag_name = "irakli tag";
+  const body = 'released by gm';
+  const draft = false;
+  const prerelease = false;
+  
+  requestWithAuth("post /repos/{owner}/{repo}/releases", {
+      token,
       owner,
       repo,
       tag_name,
+      body,
+      draft,
+      prerelease,
+  })
+    .then(result => {
+      console.log("result", result);
+    })
+    .catch(error => {
+      console.log("error", error);
+      core.setFailed(error.message);
     });
-  } catch (error) {
-    console.log('error is', error);
-    core.setFailed(error.message);
-  }
 }
 
 async function run() {
   try {
-    const myToken = core.getInput('myToken');
+    const myToken = core.getInput('GITHUB_TOKEN');
     const octokit = github.getOctokit(myToken);
     const owner = core.getInput('owner');
     const repo = core.getInput('repo');
@@ -58,7 +88,7 @@ async function run() {
     const payload = JSON.stringify(github.context.payload, undefined, 2)
     console.log(`The event payload: ${payload}`);
     const nextTagName = await getLatestTag(octokit, owner, repo);
-    await makeRelease(octokit, owner, repo, nextTagName);
+    await makeRelease(octokit, owner, repo, nextTagName, myToken);
   } catch (error) {
     core.setFailed(error.message);
   }

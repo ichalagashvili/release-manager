@@ -1,7 +1,7 @@
 name: 'Release Manager'
 description: 'Gets latest tag from repo, applies patch increment and makes a new release'
 inputs:
-  myToken:
+  GITHUB_TOKEN:
     description: 'Github auth token'
     required: true
   repo:
