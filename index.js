@@ -1,8 +1,5 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
-const { Octokit } = require('@octokit/rest');
-
-const octokit = new Octokit()
 
 function calculateNextTag(currentTag) {
   // @TODO what if someone pushes a bad tag manually in the repo? needs robustness
@@ -12,11 +9,11 @@ function calculateNextTag(currentTag) {
   return newTagSplit.join(".");
 }
 
-async function getLatestTag() {
+async function getLatestTag(octokit, owner, repo) {
   try {
     const tagsRespone  = await octokit.repos.listTags({
-      owner: 'ichalagashvili',
-      repo: 'app-builder',
+      owner,
+      repo,
     });
     const tags = tagsRespone.data || [];
     console.log('tags', tags);
@@ -31,16 +28,33 @@ async function getLatestTag() {
   }
 }
 
-try {
-  // `who-to-greet` input defined in action metadata file
-  const nameToGreet = core.getInput('who-to-greet');
-  console.log(`Hello ${nameToGreet}!`);
-  const time = (new Date()).toTimeString();
-  core.setOutput("time", time);
-  // Get the JSON webhook payload for the event that triggered the workflow
-  const payload = JSON.stringify(github.context.payload, undefined, 2)
-  console.log(`The event payload: ${payload}`);
-  getLatestTag();
-} catch (error) {
-  core.setFailed(error.message);
+async function makeRelease(octokit, owner, repo, tag_name) {
+  try {
+    await octokit.repos.createRelease({
+      owner,
+      repo,
+      tag_name,
+    });
+  } catch (error) {
+    console.log('error', error);
+    core.setFailed(error.message);
+  }
 }
+
+async function run() {
+  try {
+    const myToken = core.getInput('myToken');
+    const octokit = github.getOctokit(myToken);
+    const owner = core.getInput('owner');
+    const repo = core.getInput('repo');
+    // Get the JSON webhook payload for the event that triggered the workflow
+    const payload = JSON.stringify(github.context.payload, undefined, 2)
+    console.log(`The event payload: ${payload}`);
+    const nextTagName = await getLatestTag(octokit, owner, repo);
+    makeRelease(octokit, owner, repo, nextTagName);
+  } catch (error) {
+    core.setFailed(error.message);
+  }
+}
+
+run();
