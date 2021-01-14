@@ -13,7 +13,7 @@ const octokit = new Octokit()
 
 async function getLatestRelease() {
   try {
-    const releases  = await octokit.repos.getLatestRelease({
+    const releases  = await octokit.repos.listReleases({
       owner: 'ichalagashvili',
       repo: 'release-manager',
     });
