@@ -28,14 +28,9 @@ Next tag name
 
 ## Example usage
 
-id: 'release_manager'
-
-uses: ichalagashvili/release-managaer@master
-
-with:
-
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  
-  owner: 'ichalagashvili'
-  
+id: 'release_manager'  
+uses: ichalagashvili/release-managaer@master  
+with:  
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+  owner: 'ichalagashvili'  
   repo: 'app-builder'
