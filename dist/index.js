@@ -14,7 +14,9 @@ const octokit = new Octokit()
 function calculateNextTag(currentTag) {
   // @TODO what if someone pushes a bad tag manually in the repo? needs robustness
   const nextPatchVersion = parseInt(currentTag.split(".").reverse()[0]) + 1;
-  return currentTag.split(".").slice(0, 2).push(`${nextPatchVersion}`);
+  const newTagSplit = currentTag.split(".").slice(0, 2);
+  newTagSplit.push(`${nextPatchVersion}`);
+  return newTagSplit.join(".");
 }
 
 async function getLatestTag() {
