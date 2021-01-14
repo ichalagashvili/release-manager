@@ -18,10 +18,11 @@ function calculateNextTag(currentTag) {
 
 async function getLatestTag() {
   try {
-    const tags  = await octokit.repos.listTags({
+    const tagsRespone  = await octokit.repos.listTags({
       owner: 'ichalagashvili',
       repo: 'app-builder',
-    }).data || [];
+    });
+    const tags = tagsRespone.data || [];
     console.log('tags', tags);
     const latestTag = tags[0] || {};
     console.log('latestTag', latestTag);
