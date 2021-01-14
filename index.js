@@ -1,5 +1,16 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
+const { Octokit } = require('@octokit/rest');
+
+const octokit = new Octokit()
+
+async function getLatestRelease() {
+  const releases  = await octokit.repos.getLatestRelease({
+    owner: 'ichalagashvili',
+    repo: 'app-builder',
+  });
+  console.log('releases', releases);
+}
 
 try {
   // `who-to-greet` input defined in action metadata file
@@ -10,6 +21,7 @@ try {
   // Get the JSON webhook payload for the event that triggered the workflow
   const payload = JSON.stringify(github.context.payload, undefined, 2)
   console.log(`The event payload: ${payload}`);
+  getLatestRelease();
 } catch (error) {
   core.setFailed(error.message);
 }
