@@ -30,22 +30,13 @@ async function getLatestTag(octokit, owner, repo) {
 
 async function makeRelease(octokit, owner, repo, tag_name) {
   try {
-    // await octokit.repos.createRelease({
-    //   owner,
-    //   repo,
-    //   tag_name,
-    //   name: tag_name,
-    //   body: `release ${tag_name}`,
-    //   draft: false,
-    //   prerelease: false
-    // });
-    await octokit.request('POST /repos/{owner}/{repo}/releases', {
+    await octokit.repos.createRelease({
       owner,
       repo,
-      tag_name
+      tag_name,
     });
   } catch (error) {
-    console.log('error', error);
+    console.log('error is', error);
     core.setFailed(error.message);
   }
 }
