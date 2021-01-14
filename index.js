@@ -6,7 +6,7 @@ const octokit = new Octokit()
 
 function calculateNextTag(currentTag) {
   // @TODO what if someone pushes a bad tag manually in the repo? needs robustness
-  return parseInt(currentTag.split(".")).reverse()[0] + 1;
+  return parseInt(currentTag.split(".").reverse()[0]) + 1;
 }
 
 async function getLatestTag() {
