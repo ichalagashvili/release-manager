@@ -42,35 +42,6 @@ async function makeRelease(octokit, owner, repo, tag_name) {
     console.log('error is', error);
     core.setFailed(error.message);
   }
-  // const requestWithAuth = request.defaults({
-  //   headers: {
-  //     authorization: `Bearer ${token}`
-  //   },
-  // });
-  
-  // const owner = "ichalagashvili";
-  // const repo = "app-builder";
-  // const tag_name = "v6.1.777";
-  // const body = 'released by gm';
-  // const draft = false;
-  // const prerelease = false;
-  
-  // requestWithAuth("post /repos/{owner}/{repo}/releases", {
-  //     token,
-  //     owner,
-  //     repo,
-  //     tag_name,
-  //     body,
-  //     draft,
-  //     prerelease,
-  // })
-  //   .then(result => {
-  //     console.log("result", result);
-  //   })
-  //   .catch(error => {
-  //     console.log("error", error);
-  //     core.setFailed(error.message);
-  //   });
 }
 
 async function run() {
